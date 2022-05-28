@@ -34,14 +34,17 @@ public class CatFactsApi {
         Use the WebClient to make the request, converting the response to String.class.
         This request doesn't require url parameters, so you can omit the .uri() method call entirely
         */
-    	Mono<String> stringMono = webClient
-    				.get()
-    			.retrieve()
-    			.bodyToMono(String.class);
-    	String response = stringMono.block();
-    	System.out.println(response);
+
+         Mono<String> stringMono = webClient
+         		.get()
+                .retrieve()
+                .bodyToMono(String.class);
+    	 String response = stringMono.block();
+
+         System.out.println(response);
+
         //Collect the response from the Mono object
-    	
+
 
         /*
         Print out the actual JSON response -
@@ -54,7 +57,7 @@ public class CatFactsApi {
         and place it in the cat_facts_API.data_transfer_objects package.
         Select:
         Class name: CatWrapper
-        Target Language = java
+        Target Language = java	
         Source Type = JSON
         Annotation Style = Gson
         */
@@ -64,9 +67,11 @@ public class CatFactsApi {
 
         //Make the request, saving the response in an object of the type that you just created in your
         //data_transfer_objects package (CatWrapper)
-    	  CatFactsApi search = new CatFactsApi();
+
         //Use block() to collect the response into a java object using the class you just created
-    	  search.testRequest();
+    	  CatFactsApi catsearch = new CatFactsApi();
+
+          catsearch.testRequest();
         //return the Object
         return null;
 
@@ -75,9 +80,10 @@ public class CatFactsApi {
 
     public String findCatFact(){
         //use the getCatFact method to retrieve a cat fact
-    	String fact = new getCatFact();
+
+       String fact =  getCatFact();
         //return the first (and only) String in the Arraylist of data in the response
-         return fact;
+        return fact;
     }
 
     public void setWebClient(WebClient webClient) {

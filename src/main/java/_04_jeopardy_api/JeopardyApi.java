@@ -17,7 +17,7 @@ To simplify things a little bit, we will just ask the user one question from eac
 
 public class JeopardyApi {
 
-    private final WebClient webClient;
+    private WebClient webClient;
 
     private static final String baseUrl = "http://jservice.io/api/clues";
 
@@ -38,22 +38,26 @@ public class JeopardyApi {
         //with the specified point value.
         //
         //Make sure to save the response as type Clue[].class in the bodyToMono() method call
-    	Clue[] clues = webClient
-    			.get()
-    			.uri(uriBuilder -> uriBuilder
-    					.queryParam("value", value)
-    					.build())
-    			.retrieve()
-    			.bodyToMono(Clue[].class)
-    			.block();
-    	Random random = new Random();
-    	int num = random.nextInt(clues.length);
-        //2
+
+        //
+
+        Clue[] clues = webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .queryParam("value", value)
+                        .build())
+                .retrieve()
+                .bodyToMono(Clue[].class)
+                .block();
+
+
+        Random random = new Random();
+       int num = random.nextInt(clues.length);
         //Get a random number less than the size of the Clue array
 
         //3
         //return the clue at the random index you just created
-    	
+
         return clues[num];
     }
 }

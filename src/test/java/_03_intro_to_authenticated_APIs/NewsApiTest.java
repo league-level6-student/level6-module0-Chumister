@@ -27,28 +27,81 @@ class NewsApiTest {
 
     NewsApi newsApi;
 
+
+    @Mock
+    WebClient client;
+    @Mock
+    RequestHeadersSpec headersSpec;
+    @Mock
+    RequestHeadersUriSpec headersUriSpec;
+    @Mock
+    ResponseSpec responseSpec;
+    @Mock
+    UriBuilder uriBuild;
+    @Mock
+    Mono<ApiExampleWrapper> mono;
+
+
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+        newsApi = new NewsApi();
+        newsApi.setWebClient(client);
 
     }
 
     @Test
     void itShouldGetNewsStoryByTopic() {
         //given
-
+String topic = "pasta";
+ApiExampleWrapper expected = new ApiExampleWrapper();
+        when(client.get()).thenReturn(headersUriSpec);
+        when(headersUriSpec.uri((Function<UriBuilder, URI>) any())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(ApiExampleWrapper.class)).thenReturn(mono);
+       when(mono.block()).thenReturn(expected);
         //when
+        ApiExampleWrapper actual = newsApi.getNewsStoryByTopic(topic);
 
         //then
+        assertEquals(expected, actual);
+
+
     }
 
     @Test
     void itShouldFindStory(){
-        //given
+        String topic = "pasta";
+        String title = "Best Kinds of Pasta";
+        String content = "Gnocchi is the best";
+        String url = "www.italy.com/articles/best-kinds-of-pasta/";
+        String expectedMessage = title + " -\n" + content + "\nFull article: " + url;
+
+        ApiExampleWrapper wrapper = new ApiExampleWrapper();
+
+        Article article = new Article();
+        article.setTitle(title);
+        article.setContent(content);
+        article.setUrl(url);
+
+        List<Article> articles = new ArrayList<Article>();
+        articles.add(article);
+        wrapper.setArticles(articles);
+
+        when(client.get()).thenReturn(headersUriSpec);
+        when(headersUriSpec.uri((Function<UriBuilder, URI>) any())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(ApiExampleWrapper.class)).thenReturn(mono);
+        when(mono.block()).thenReturn(wrapper);
 
         //when
+        String actualMessage = newsApi.findStory(topic);
 
         //then
+        assertEquals(expectedMessage, actualMessage);
     }
 
-
 }
+
+    
+
