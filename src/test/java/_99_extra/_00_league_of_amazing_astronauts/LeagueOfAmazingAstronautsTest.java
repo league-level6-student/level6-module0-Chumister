@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /*
@@ -44,17 +46,22 @@ class LeagueOfAmazingAstronautsTest {
     @Test
     void itShouldLaunchRocket() {
         //given
-
+    	String destination = "Mars";
+    	int milesToDestination = 68000000;
         //when
-
+    	when(rocket.isLoaded()).thenReturn(true);
+    	underTest.launchRocket(destination);
         //then
+    	verify(rocket, times(1)).setDestination(destination, milesToDestination);
+    	verify(rocket, times(1)).launch();
     }
 
 
     @Test
     void itShouldThrowWhenDestinationIsUnknown() {
         //given
-
+    	String destination = "Mars";
+    	when(rocket.isLoaded()).thenReturn(true);
         //when
         //then
     }
@@ -62,8 +69,11 @@ class LeagueOfAmazingAstronautsTest {
     @Test
     void itShouldThrowNotLoaded() {
         //given
-
+    	String destination = "Venus";
+    	when(rocket.isLoaded()).thenReturn(false);
         //when
+        Exception e = assertThrows(Exception.class, () -> underTest.launchRocket(destination));
+        assertEquals("Rocketship is not loaded", e.getMessage());
         //then
 
     }
