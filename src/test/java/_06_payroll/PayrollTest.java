@@ -17,7 +17,7 @@ class PayrollTest {
         //when
     	double actual = payroll.calculatePaycheck(hourlyWage, hours);
         //then
-    	assertEquals(expected, actual);
+    	assertEquals(expected, actual );
     }
 
     @Test
